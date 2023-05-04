@@ -103,11 +103,11 @@ public class InfinityNukeEntity extends Entity {
         }
 
         if (exploding) {
-            if (world instanceof ServerWorld && explosionHelper == null) {
+            setTicksExploding(this.getTicksExploding() + 1);
+            if (world instanceof ServerWorld && explosionHelper == null && explodingsound != null) {
                 explosionHelper = new ProcessExplosion(this.getPosition(), ItemInfinityNuke.getRadius(original), (ServerWorld) this.world, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
                 ExplosionTickHandler.processExplosionList.add(explosionHelper);
             }
-            setTicksExploding(this.getTicksExploding() + 1);
             this.func_233566_aG_();
         }
         if (this.world.isRemote && this.getDataManager().get(EXPLODING)) {
