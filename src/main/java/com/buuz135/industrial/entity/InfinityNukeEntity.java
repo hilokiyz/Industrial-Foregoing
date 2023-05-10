@@ -1,7 +1,7 @@
 /*
  * This file is part of Industrial Foregoing.
  *
- * Copyright 2021, Buuz135
+ * Copyright 2023, Buuz135
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -70,6 +70,7 @@ public class InfinityNukeEntity extends Entity {
     private boolean armed = false;
     private int radius = 1;
     private int ticksExploding = 1;
+    private int fusetime = 780; //fuse time in ticks 39s * 20ticks
     private ProcessExplosion explosionHelper;
     @OnlyIn(Dist.CLIENT)
     private TickeableSound chargingSound;
@@ -104,9 +105,11 @@ public class InfinityNukeEntity extends Entity {
 
         if (exploding) {
             setTicksExploding(this.getTicksExploding() + 1);
-            if (world instanceof ServerWorld && explosionHelper == null && explodingsound != null) {
-                explosionHelper = new ProcessExplosion(this.getPosition(), ItemInfinityNuke.getRadius(original), (ServerWorld) this.world, 39, placedBy != null ? placedBy.getDisplayName().getString() : "");
-                ExplosionTickHandler.processExplosionList.add(explosionHelper);
+            if(this.ticksExploding > this.fusetime){
+                if (world instanceof ServerWorld && explosionHelper == null) {
+                    explosionHelper = new ProcessExplosion(this.getPosition(), ItemInfinityNuke.getRadius(original), (ServerWorld) this.world, 1, placedBy != null ? placedBy.getDisplayName().getString() : "");
+                    ExplosionTickHandler.processExplosionList.add(explosionHelper);
+                }
             }
             this.func_233566_aG_();
         }
